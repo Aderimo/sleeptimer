@@ -15,19 +15,29 @@ namespace SleepTimer
         {
             switch (a)
             {
-                case 1: return "Uyku";
-                case 2: return "Hazırda beklet";
-                default: return "Kapat";
+                case 1: return Lang.T("Uyku", "Sleep");
+                case 2: return Lang.T("Hazırda beklet", "Hibernate");
+                default: return Lang.T("Kapat", "Shut down");
             }
         }
 
-        public static string Verb(int a)
+        // Tepsi ipucu: "58:12 sonra kapanır" / "Shuts down in 58:12"
+        public static string Line(int a, string time)
         {
+            if (Lang.Tr)
+            {
+                switch (a)
+                {
+                    case 1: return time + " sonra uyku moduna geçer";
+                    case 2: return time + " sonra hazırda beklemeye geçer";
+                    default: return time + " sonra kapanır";
+                }
+            }
             switch (a)
             {
-                case 1: return "uyku moduna geçer";
-                case 2: return "hazırda beklemeye geçer";
-                default: return "kapanır";
+                case 1: return "Sleeps in " + time;
+                case 2: return "Hibernates in " + time;
+                default: return "Shuts down in " + time;
             }
         }
 
@@ -35,9 +45,9 @@ namespace SleepTimer
         {
             switch (a)
             {
-                case 1: return "Uyku moduna geçiliyor";
-                case 2: return "Hazırda beklemeye geçiliyor";
-                default: return "Bilgisayar kapanıyor";
+                case 1: return Lang.T("Uyku moduna geçiliyor", "Going to sleep");
+                case 2: return Lang.T("Hazırda beklemeye geçiliyor", "Hibernating");
+                default: return Lang.T("Bilgisayar kapanıyor", "Shutting down");
             }
         }
 
@@ -46,7 +56,8 @@ namespace SleepTimer
             if (TestHook != null) { TestHook(a); return; }
             if (Program.DryRun)
             {
-                MessageBox.Show("Test modu: şimdi \"" + Name(a) + "\" işlemi yapılacaktı.", "SleepTimer");
+                MessageBox.Show(Lang.T("Test modu: şimdi \"" + Name(a) + "\" işlemi yapılacaktı.",
+                    "Test mode: \"" + Name(a) + "\" would run now."), "SleepTimer");
                 return;
             }
             try
@@ -70,7 +81,8 @@ namespace SleepTimer
             }
             catch (Exception ex)
             {
-                MessageBox.Show("İşlem yapılamadı: " + ex.Message, "SleepTimer", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(Lang.T("İşlem yapılamadı: ", "Couldn't do it: ") + ex.Message, "SleepTimer",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
     }

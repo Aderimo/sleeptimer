@@ -65,7 +65,7 @@ namespace SleepTimer
             custom.TextChanged += delegate { if (error != null) { error = null; Invalidate(); } };
             custom.GotFocus += delegate { Invalidate(); };
             custom.LostFocus += delegate { Invalidate(); };
-            custom.HandleCreated += delegate { Native.SendMessage(custom.Handle, 0x1501, (IntPtr)1, "özel"); };
+            custom.HandleCreated += delegate { Native.SendMessage(custom.Handle, 0x1501, (IntPtr)1, Lang.T("özel", "custom")); };
             Controls.Add(custom);
             Rectangle cr = CustomRect();
             int th = custom.PreferredHeight;
@@ -158,8 +158,8 @@ namespace SleepTimer
             if (!Duration.TryParse(custom.Text, out d))
             {
                 error = custom.Text.Trim().Length == 0
-                    ? "Süre yaz: 90, 1:30, 2s"
-                    : "Geçersiz süre. Örnek: 90, 1:30, 2s";
+                    ? Lang.T("Süre yaz: 90, 1:30, 2s", "Type a time: 90, 1:30, 2h")
+                    : Lang.T("Geçersiz süre. Örnek: 90, 1:30, 2s", "Invalid time. Example: 90, 1:30, 2h");
                 custom.Focus();
                 custom.SelectAll();
                 Invalidate();
@@ -200,7 +200,7 @@ namespace SleepTimer
                 if (rem < TimeSpan.FromMinutes(-2))
                 {
                     CancelTimer();
-                    Balloon("Zamanlayıcı durduruldu", "Süre bilgisayar uykudayken doldu, işlem yapılmadı.");
+                    Balloon(Lang.T("Zamanlayıcı durduruldu", "Timer stopped"), Lang.T("Süre bilgisayar uykudayken doldu, işlem yapılmadı.", "Time ran out while the PC was asleep, so nothing was done."));
                     return;
                 }
                 Finish();
@@ -261,8 +261,8 @@ namespace SleepTimer
         void UpdateTrayText(TimeSpan rem)
         {
             string t = running
-                ? "SleepTimer · " + Ui.Fmt(rem) + " sonra " + Power.Verb(settings.Action)
-                : "SleepTimer · beklemede";
+                ? "SleepTimer · " + Power.Line(settings.Action, Ui.Fmt(rem))
+                : "SleepTimer · " + Lang.T("beklemede", "idle");
             if (t.Length > 63) t = t.Substring(0, 63);
             tray.Text = t;
         }
@@ -270,21 +270,21 @@ namespace SleepTimer
         void BuildTrayMenu()
         {
             trayMenu.Items.Clear();
-            AddMenu("Göster", ShowFromTray);
+            AddMenu(Lang.T("Göster", "Show"), ShowFromTray);
             trayMenu.Items.Add(new ToolStripSeparator());
             foreach (int m in Presets)
             {
                 int mm = m;
-                AddMenu(m + " dk", delegate { StartFor(TimeSpan.FromMinutes(mm), mm); });
+                AddMenu(m + Lang.T(" dk", " min"), delegate { StartFor(TimeSpan.FromMinutes(mm), mm); });
             }
             if (running)
             {
                 trayMenu.Items.Add(new ToolStripSeparator());
-                AddMenu("+15 dk", delegate { Extend(15); });
-                AddMenu("İptal", CancelTimer);
+                AddMenu(Lang.T("+15 dk", "+15 min"), delegate { Extend(15); });
+                AddMenu(Lang.T("İptal", "Cancel"), CancelTimer);
             }
             trayMenu.Items.Add(new ToolStripSeparator());
-            AddMenu(running ? "Çıkış (zamanlayıcı iptal)" : "Çıkış", ExitApp);
+            AddMenu(running ? Lang.T("Çıkış (zamanlayıcı iptal)", "Exit (cancels the timer)") : Lang.T("Çıkış", "Exit"), ExitApp);
         }
 
         void AddMenu(string text, Action onClick)
@@ -309,7 +309,7 @@ namespace SleepTimer
             {
                 settings.TrayHintShown = true;
                 settings.Save();
-                Balloon("SleepTimer arka planda", "Geri sayım sürüyor. Pencere için saatin yanındaki simgeye tıkla.");
+                Balloon(Lang.T("SleepTimer arka planda", "SleepTimer is in the background"), Lang.T("Geri sayım sürüyor. Pencere için saatin yanındaki simgeye tıkla.", "The countdown keeps running. Click the icon next to the clock to open it."));
             }
         }
 
@@ -404,7 +404,7 @@ namespace SleepTimer
                 Ui.Text(g, Ui.Fmt(rem), fBig, Ui.Fg, R(12, 34, 140, 44), TextFormatFlags.Left);
                 Rectangle plus = PlusBtnRect();
                 DrawButton(g, "plus", "+15", plus, false);
-                DrawButton(g, "cancel", "İptal", main, false);
+                DrawButton(g, "cancel", Lang.T("İptal", "Cancel"), main, false);
                 Bar(g, S(156), plus.X - S(14), rem);
             }
             else
@@ -413,10 +413,10 @@ namespace SleepTimer
                     Ui.Text(g, error, fSmall, Ui.Danger, new Rectangle(S(14), S(34), main.X - S(28), S(44)), TextFormatFlags.Left);
                 else
                 {
-                    Ui.Text(g, "Dakika seç", fHint, Ui.Muted, R(14, 34, 140, 44), TextFormatFlags.Left);
+                    Ui.Text(g, Lang.T("Dakika seç", "Pick minutes"), fHint, Ui.Muted, R(14, 34, 140, 44), TextFormatFlags.Left);
                     Bar(g, S(156), main.X - S(14), TimeSpan.Zero);
                 }
-                DrawButton(g, "go", "Başlat", main, true);
+                DrawButton(g, "go", Lang.T("Başlat", "Start"), main, true);
             }
 
             for (int i = 0; i < Presets.Length; i++)
@@ -439,10 +439,10 @@ namespace SleepTimer
             Hit("custom", cr);
 
             int x = S(10);
-            x = Pill(g, "action", "Eylem: " + Power.Name(settings.Action), x) + S(6);
-            Pill(g, "warn", settings.Warn ? "Uyarı: 1 dk önce" : "Uyarı: kapalı", x);
+            x = Pill(g, "action", Lang.T("Eylem: ", "Action: ") + Power.Name(settings.Action), x) + S(6);
+            Pill(g, "warn", settings.Warn ? Lang.T("Uyarı: 1 dk önce", "Warning: 1 min before") : Lang.T("Uyarı: kapalı", "Warning: off"), x);
             if (running)
-                Ui.Text(g, "Bitiş " + endUtc.ToLocalTime().ToString("HH:mm"), fSmall, Ui.Muted,
+                Ui.Text(g, Lang.T("Bitiş ", "Ends ") + endUtc.ToLocalTime().ToString("HH:mm"), fSmall, Ui.Muted,
                     R(LW - 14 - 110, 130, 110, 26), TextFormatFlags.Right);
         }
 

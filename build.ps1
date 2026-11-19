@@ -14,7 +14,7 @@ $ico = Join-Path $root 'assets\icon.ico'
 if (-not (Test-Path $ico)) {
     & $csc /nologo /codepage:65001 /optimize+ "/out:$obj\MakeIcon.exe" /r:System.Drawing.dll "$root\tools\MakeIcon.cs"
     if ($LASTEXITCODE) { throw 'MakeIcon build failed' }
-    & "$obj\MakeIcon.exe" $ico "$root\assets\icon-preview.png"
+    & "$obj\MakeIcon.exe" $ico "$root\assets\icon.png"
     if ($LASTEXITCODE) { throw 'MakeIcon failed' }
 }
 

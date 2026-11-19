@@ -16,4 +16,6 @@ Windows kapatma zamanlayıcısı. C# + WinForms, hedef .NET Framework 4.8 (Windo
 - Kaynaklar UTF-8, derleme `/codepage:65001`. `build.ps1` sadece ASCII (PowerShell 5.1).
 - Kapatma `shutdown.exe /s /t 0` (zorlamasız). Testlerde `Power.TestHook` kullan; testler bilgisayarı asla kapatmaz.
 - Arka planda gereksiz iş yok: zamanlayıcı sadece geri sayım varken çalışır (görünürken 250 ms, tepside 1 sn).
-- Tasarım "C": koyu kompakt şerit, renkler `Ui.cs` içinde. Arayüz metinleri Türkçe.
+- Tasarım "C": koyu kompakt şerit, renkler `Ui.cs` içinde.
+- Arayüz iki dilli: her metin `Lang.T("türkçe", "english")`; Windows dili tr ise Türkçe.
+- Herkese açık depo: github.com/Aderimo/sleeptimer. README.md (EN) + README.tr.md, sürüm notları `docs/release-notes/`, ekran görüntüleri `.\build.ps1 -Test` çıktısından `docs/screenshots/{en,tr}`.

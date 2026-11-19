@@ -86,11 +86,11 @@ namespace SleepTimer
             Rectangle bigR = R(16, 32, 120, 44);
             Ui.Text(g, big, fBig, Ui.Accent, bigR, TextFormatFlags.Left);
             int w = TextRenderer.MeasureText(g, big, fBig, Size.Empty, TextFormatFlags.NoPadding).Width;
-            Ui.Text(g, "saniye kaldı", fSmall, Ui.Muted,
+            Ui.Text(g, Lang.T("saniye kaldı", "seconds left"), fSmall, Ui.Muted,
                 new Rectangle(bigR.X + w + S(8), bigR.Y + S(6), S(200), bigR.Height), TextFormatFlags.Left);
 
-            Btn(g, "extend", "+15 dk ertele", R(16, 82, 140, 30), false);
-            Btn(g, "cancel", "İptal", R(164, 82, 140, 30), true);
+            Btn(g, "extend", Lang.T("+15 dk ertele", "Snooze 15 min"), R(16, 82, 140, 30), false);
+            Btn(g, "cancel", Lang.T("İptal", "Cancel"), R(164, 82, 140, 30), true);
         }
 
         void Btn(Graphics g, string id, string text, Rectangle r, bool danger)

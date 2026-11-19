@@ -62,6 +62,9 @@ static class Tests
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);
 
+        Lang.Override = true;
+        dir = Path.Combine(dir, "tr");
+        Directory.CreateDirectory(dir);
         var f = new MainForm(TimeSpan.Zero);
         f.SuppressBalloons = true;
         f.Show();
@@ -121,6 +124,29 @@ static class Tests
         Snap(f, dir, "5-hata.png");
 
         f.ExitApp();
+        Application.DoEvents();
+
+        // İngilizce ekran görüntüleri
+        Lang.Override = false;
+        string en = Path.Combine(Path.GetDirectoryName(dir), "en");
+        Directory.CreateDirectory(en);
+        var g = new MainForm(TimeSpan.Zero);
+        g.SuppressBalloons = true;
+        g.Show();
+        Snap(g, en, "1-bos.png");
+        g.StartFor(TimeSpan.FromMinutes(45), 45);
+        g.SetRemainingForTest(TimeSpan.FromMinutes(31) + TimeSpan.FromSeconds(12));
+        g.OnTick();
+        Snap(g, en, "2-sayiyor.png");
+        g.SetRemainingForTest(TimeSpan.FromSeconds(50));
+        g.OnTick();
+        Check(g.WarningShown, "EN: uyarı açıldı");
+        if (g.Warning != null) Snap(g.Warning, en, "3-uyari.png");
+        g.CancelTimer();
+        g.CustomText = "abc";
+        g.StartCustom();
+        Snap(g, en, "5-hata.png");
+        g.ExitApp();
         Application.DoEvents();
 
         Console.WriteLine(fail == 0 ? "Tüm testler geçti." : fail + " test başarısız.");
