@@ -93,8 +93,9 @@ Program açıkken tekrar açarsan var olan pencere öne gelir.
 SDK gerekmez.
 
 ```powershell
-.\build.ps1          # dist\SleepTimer.exe
-.\build.ps1 -Test    # derleme + otomatik testler + obj\test\ altında ekran görüntüleri
+.\build.ps1             # proje klasöründe SleepTimer.exe
+.\build.ps1 -Test       # derleme + otomatik testler + obj\test\ altında ekran görüntüleri
+.\build.ps1 -Shortcut   # derleme + masaüstü kısayolu
 ```
 
 Testler bilgisayarı asla kapatmaz; güç işlemi yerine bir test kancası çalışır.

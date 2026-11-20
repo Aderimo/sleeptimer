@@ -94,8 +94,9 @@ C# 5 / WinForms on .NET Framework 4.8, built with the `csc.exe` that comes with 
 so no SDK is needed.
 
 ```powershell
-.\build.ps1          # dist\SleepTimer.exe
-.\build.ps1 -Test    # build + automated tests + screenshots in obj\test\
+.\build.ps1             # SleepTimer.exe in the project folder
+.\build.ps1 -Test       # build + automated tests + screenshots in obj\test\
+.\build.ps1 -Shortcut   # build + desktop shortcut
 ```
 
 The tests never shut the PC down; the power action is replaced with a test hook.

@@ -3,7 +3,7 @@
 Windows kapatma zamanlayıcısı. C# + WinForms, hedef .NET Framework 4.8 (Windows'ta hazır). Tek exe, kurulumsuz.
 
 ## Komutlar
-- `.\build.ps1` → `dist\SleepTimer.exe`
+- `.\build.ps1` → proje klasöründe `SleepTimer.exe` (+ `obj\SHA256SUMS.txt`); `-Shortcut` masaüstü kısayolu yapar. Program açıksa üzerine yazamaz.
 - `.\build.ps1 -Test` → derler, `tests\Tests.cs` çalıştırır, ekran görüntülerini `obj\test\` altına yazar.
 
 ## Yapı
